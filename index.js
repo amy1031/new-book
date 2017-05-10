@@ -3,6 +3,8 @@ var bodyParser = require('body-parser')
 var cors = require('cors')
 var server = express()
 var port = 9003
+var Book = require('./models/book')
+var Movie = require('./models/movie')
 
 // !! Database Stuff
 var mongoose = require('mongoose')
@@ -32,20 +34,9 @@ server.use(bodyParser.urlencoded({ extended: true }))
 server.use(cors())
 server.use('/', express.static(`${__dirname}/public/`))
 
+var routes = require('./routes');
+server.use(routes.router);
 
-// BOOK in the DB (can create multiple schemas)
-var Schema = mongoose.Schema
-var BookSchema = new Schema({
-    title: {type: String, required: true},
-    author: {type: String, required: true},
-    published: {type: Number, required: true},
-    rating: {type: Number, required: true}
-})
-//{type: Boolean, required: true, default: false}
-
-//In the database, you'll have a collection of 'Book' which will follow the Book schema model
-var Book = mongoose.model('Book', BookSchema)
-// END BOOK
 
 
 server.get('/', function(req, res, next) {
@@ -53,11 +44,11 @@ server.get('/', function(req, res, next) {
 })
 
 
-server.get('/books', function(req, res, next) {
-    Book.find({}).then(function(books) {
-        res.send(books)
-    })
-})
+// server.get('/books', function(req, res, next) {
+//     Book.find({}).then(function(books) {
+//         res.send(books)
+//     })
+// })
 
 server.get('/books/search', function(req, res, next){
     var query = req.query
@@ -77,13 +68,13 @@ server.get('/books/:id', function(req, res, next) {
     })
 })
 
-server.post('/books', function (req, res, next) {
-  var newBook = req.body
-  Book.create(newBook)
-    .then(function (newlyCreatedBook) {
-      res.send(newlyCreatedBook)
-    })
-})
+// server.post('/books', function (req, res, next) {
+//   var newBook = req.body
+//   Book.create(newBook)
+//     .then(function (newlyCreatedBook) {
+//       res.send(newlyCreatedBook)
+//     })
+// })
 
 
 server.put('/books/:id', function(req, res, next){
