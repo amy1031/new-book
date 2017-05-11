@@ -19,8 +19,5 @@ var url = 'http://localhost:9003/books'
         }
       );
     });
-		// $.get(url, function(data) {
-        //     console.log(data)
-        // })
 	}
 }
